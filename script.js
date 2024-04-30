@@ -1,20 +1,41 @@
-let videoQueue = [];
+// JavaScript สำหรับการสร้างเกม Plinko
+// คุณสามารถปรับแต่งและเพิ่มฟีเจอร์ต่าง ๆ ตามต้องการได้
 
-function addToQueue() {
-    let videoUrl = document.getElementById("videoUrl").value;
-    if (videoUrl !== "") {
-        videoQueue.push(videoUrl);
-        displayQueue();
-        document.getElementById("videoUrl").value = "";
+// ค่าคงที่
+const BOARD_WIDTH = 400; // ความกว้างของกระดาน
+const BOARD_HEIGHT = 600; // ความสูงของกระดาน
+const NUM_PEGS = 10; // จำนวนของพุ่ม
+const PEG_RADIUS = 10; // รัศมีของพุ่ม
+const BALL_RADIUS = 10; // รัศมีของลูกบอล
+
+// สร้างกระดาน Plinko
+const canvas = document.getElementById('board');
+const ctx = canvas.getContext('2d');
+
+// สร้างพุ่ม
+const pegs = [];
+for (let i = 0; i < NUM_PEGS; i++) {
+    pegs.push({ x: i * (BOARD_WIDTH / (NUM_PEGS - 1)), y: BOARD_HEIGHT / 3 });
+}
+
+// ฟังก์ชันสำหรับวาดกระดานและพุ่ม
+function drawBoard() {
+    // วาดพุ่ม
+    for (let peg of pegs) {
+        ctx.beginPath();
+        ctx.arc(peg.x, peg.y, PEG_RADIUS, 0, Math.PI * 2);
+        ctx.fillStyle = '#f00';
+        ctx.fill();
+        ctx.closePath();
     }
+
+    // วาดกระดาน
+    ctx.beginPath();
+    ctx.rect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+    ctx.strokeStyle = '#000';
+    ctx.stroke();
+    ctx.closePath();
 }
 
-function displayQueue() {
-    let container = document.getElementById("video-container");
-    container.innerHTML = "";
-    videoQueue.forEach(function(videoUrl) {
-        let videoId = videoUrl.split("=")[1];
-        let videoFrame = `<div class="video"><iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe></div>`;
-        container.innerHTML += videoFrame;
-    });
-}
+// เรียกใช้ฟังก์ชันสำหรับวาดกระดานและพุ่ม
+drawBoard();
